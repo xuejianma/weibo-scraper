@@ -69,7 +69,7 @@ def weibo_tweets(containerid: str, page: int) -> Response:
     :return:
     """
     _params = {"containerid": containerid, "page": page}
-    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS, headers=_HEADERS)
+    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS)
     if _response.status_code == 200 and _response.json().get("ok") == 1:
         return _response.json()
     raise WeiboApiException(
