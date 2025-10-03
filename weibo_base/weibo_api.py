@@ -15,6 +15,14 @@ Response = Optional[dict]
 _GET_INDEX = "https://m.weibo.cn/api/container/getIndex"
 _GET_SECOND = "https://m.weibo.cn/api/container/getSecond"
 _COMMENTS_HOTFLOW = "https://m.weibo.cn/comments/hotflow"
+_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0 Safari/537.36",
+    "Referer": f"https://m.weibo.cn/",
+    "Accept": "application/json, text/plain, */*",
+    "X-Requested-With": "XMLHttpRequest",
+}
 
 
 def search_by_name(name: str) -> Response:
@@ -27,7 +35,7 @@ def search_by_name(name: str) -> Response:
      :return json string including summary info
     """
     _params = {'queryVal': name, 'containerid': '100103type%3D3%26q%3D' + name}
-    _response = requests.get(url=_GET_INDEX, params=_params)
+    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS)
     if _response.status_code == 200:
         return _response.json()
     return None
@@ -44,7 +52,7 @@ def weibo_getIndex(uid_value: str) -> Response:
     :return:
     """
     _params = {"type": "uid", "value": uid_value}
-    _response = requests.get(url=_GET_INDEX, params=_params)
+    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS)
     if _response.status_code == 200:
         return _response.json()
     return None
@@ -61,7 +69,7 @@ def weibo_tweets(containerid: str, page: int) -> Response:
     :return:
     """
     _params = {"containerid": containerid, "page": page}
-    _response = requests.get(url=_GET_INDEX, params=_params)
+    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS, headers=_HEADERS)
     if _response.status_code == 200 and _response.json().get("ok") == 1:
         return _response.json()
     raise WeiboApiException(
@@ -77,7 +85,7 @@ def weibo_containerid(containerid: str, page: int) -> Response:
     :return:
     """
     _params = {"containerid": containerid, "page": page}
-    _response = requests.get(url=_GET_INDEX, params=_params)
+    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS)
     if _response.status_code == 200 and _response.json().get("ok") == 1:
         return _response.json()
     raise WeiboApiException(
@@ -92,7 +100,7 @@ def weibo_second(containerid: str, page: int) -> Response:
     :return:
     """
     _params = {"containerid": containerid, "page": page}
-    _response = requests.get(url=_GET_SECOND, params=_params)
+    _response = requests.get(url=_GET_SECOND, params=_params, headers=_HEADERS)
     if _response.status_code == 200 and _response.json().get("ok") == 1:
         return _response.json()
     raise WeiboApiException(
@@ -108,7 +116,7 @@ def weibo_comments(id: str, mid: str) -> Response:
     :return:
     """
     _params = {"id": id, "mid": mid}
-    _response = requests.get(url=_COMMENTS_HOTFLOW, params=_params)
+    _response = requests.get(url=_COMMENTS_HOTFLOW, params=_params, headers=_HEADERS)
     if _response.status_code == 200 and _response.json().get("ok") == 1:
         return _response.json()
     raise WeiboApiException(
@@ -117,7 +125,7 @@ def weibo_comments(id: str, mid: str) -> Response:
 
 def realtime_hotword():
     _params = {"containerid": "106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot"}
-    _response = requests.get(url=_GET_INDEX, params=_params)
+    _response = requests.get(url=_GET_INDEX, params=_params, headers=_HEADERS)
 
     if _response.status_code == 200 and _response.json().get("ok") == 1:
         return _response.json()
